@@ -32,7 +32,7 @@ public abstract class MvpFragment<V extends IMvpView, P extends IMvpPresenter<V>
     protected FragmentMvpDelegate mvpDelegate;
 
     /*获取Presenter数组*/
-    abstract P[] getPresenterArray();
+    protected abstract P[] getPresenterArray();
 
     @Override
     public P[] getPresenter() {
