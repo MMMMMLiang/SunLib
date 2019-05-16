@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0.3"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -54,7 +54,7 @@ publish {
     repoName = 'SunLib'//要传到的maven的名字。你可能有多个maven，要传哪个写哪个。
     groupId = 'com.sun.lib'//jcenter上的路径
     artifactId = 'net'//项目名称
-    publishVersion = '1.0.2'//版本号
+    publishVersion = '1.0.3'//版本号
     desc = 'this is a android base lib'//描述，不重要
     website = 'https://github.com/MMMMMLiang/SunLib'//网站，不重要;
 }

@@ -38,15 +38,15 @@ import retrofit2.Retrofit;
  * @author ZhongDaFeng
  */
 public class SunDownLoad {
-    /*单例模式*/
+    /**单例模式*/
     private volatile static SunDownLoad instance;
-    /*下载集合*/
+    /**下载集合*/
     private Set<Download> downloadSet;
-    /*下载集合对应回调map*/
+    /**下载集合对应回调map*/
     private HashMap<String, DownloadObserver> callbackMap;
-    /*Handler 回调下载进度到主线程*/
+    /**Handler 回调下载进度到主线程*/
     private Handler handler;
-    /*计数器*/
+    /**计数器*/
     private long counter = 0;
 
     private SunDownLoad() {
@@ -72,7 +72,9 @@ public class SunDownLoad {
      * @param download
      */
     public void startDownload(final Download download) {
-        if (download == null) return;
+        if (download == null) {
+            return;
+        }
 
         /*正在下载不处理*/
         if (callbackMap.get(download.getServerUrl()) != null) {
@@ -112,11 +114,14 @@ public class SunDownLoad {
         /* RANGE 断点续传下载 */
         api.download("bytes=" + download.getCurrentSize() + "-", download.getServerUrl())
                 .subscribeOn(Schedulers.io())
-                .map(new Function<ResponseBody, Object>() {//数据变换
+                //数据变换
+                .map(new Function<ResponseBody, Object>() {
                          @Override
                          public Object apply(@NonNull ResponseBody responseBody) throws Exception {
-                             download.setState(Download.State.LOADING);//下载中状态
-                             SunDBHelper.get().insertOrUpdate(download);//更新数据库状态(后期考虑下性能问题)
+                             //下载中状态
+                             download.setState(Download.State.LOADING);
+                             //更新数据库状态(后期考虑下性能问题)
+                             SunDBHelper.get().insertOrUpdate(download);
                              //写入文件
                              SunResponseUtil.get().download2LocalFile(responseBody, new File(download.getLocalUrl()), download);
                              return download;
@@ -135,15 +140,12 @@ public class SunDownLoad {
      */
     public void stopDownload(Download download) {
 
-        if (download == null) return;
+        if (download == null) {
+            return;
+        }
         LogUtils.d("RHttp stopDownload:" + download.getServerUrl());
-        /**
-         * 1.暂停网络数据
-         * 2.设置数据状态
-         * 3.更新数据库
-         */
 
-         /*1.暂停网络数据*/
+        /*1.暂停网络数据*/
         if (callbackMap.containsKey(download.getServerUrl())) {
             DownloadObserver observer = callbackMap.get(download.getServerUrl());
             observer.dispose();//取消
@@ -151,9 +153,12 @@ public class SunDownLoad {
         }
 
         /*2.设置数据状态*/
-        download.setState(Download.State.PAUSE);//暂停状态
-        float progress = SunFileUtil.getProgress(download.getCurrentSize(), download.getTotalSize());//计算进度
-        download.getCallback().onProgress(download.getState(), download.getCurrentSize(), download.getTotalSize(), progress);//回调
+        //暂停状态
+        download.setState(Download.State.PAUSE);
+        //计算进度
+        float progress = SunFileUtil.getProgress(download.getCurrentSize(), download.getTotalSize());
+        //回调
+        download.getCallback().onProgress(download.getState(), download.getCurrentSize(), download.getTotalSize(), progress);
 
         /*3.更新数据库*/
         SunDBHelper.get().insertOrUpdate(download);
@@ -168,7 +173,9 @@ public class SunDownLoad {
      */
     public void removeDownload(Download download, boolean removeFile) {
 
-        if (download == null) return;
+        if (download == null) {
+            return;
+        }
         LogUtils.d("RHttp removeDownload:" + download.getServerUrl());
         //未完成下载时,暂停再移除
         if (download.getState() != Download.State.FINISH) {

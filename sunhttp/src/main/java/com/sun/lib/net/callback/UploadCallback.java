@@ -37,6 +37,7 @@ public abstract class UploadCallback<T> extends HttpCallback<T> implements Uploa
      * @param data
      * @return
      */
+    @Override
     public abstract T onConvert(String data);
 
     /**
@@ -44,6 +45,7 @@ public abstract class UploadCallback<T> extends HttpCallback<T> implements Uploa
      *
      * @param value
      */
+    @Override
     public abstract void onSuccess(T value);
 
     /**
@@ -52,11 +54,13 @@ public abstract class UploadCallback<T> extends HttpCallback<T> implements Uploa
      * @param code
      * @param desc
      */
+    @Override
     public abstract void onError(int code, String desc);
 
     /**
      * 取消回调
      */
+    @Override
     public abstract void onCancel();
 
 }

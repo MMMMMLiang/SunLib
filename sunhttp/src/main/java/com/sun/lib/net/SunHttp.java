@@ -276,17 +276,20 @@ public class SunHttp {
         /*Api接口*/
         Api apiService = RetrofitUtils.get().getRetrofit(getBaseUrl(), header, httpCallback).create(Api.class);
         /*未指定默认POST*/
-        if (method == null) method = NetMethod.POST;
+        if (method == null) {
+            method = NetMethod.POST;
+        }
 
         switch (method) {
             case GET:
                 apiObservable = apiService.get(disposeApiUrl(), parameter, header);
                 break;
             case POST:
-                if (hasBodyString)
+                if (hasBodyString) {
                     apiObservable = apiService.post(disposeApiUrl(), requestBody, header);
-                else
+                } else {
                     apiObservable = apiService.post(disposeApiUrl(), parameter, header);
+                }
                 break;
             case DELETE:
                 apiObservable = apiService.delete(disposeApiUrl(), parameter, header);
